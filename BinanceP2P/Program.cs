@@ -1,16 +1,12 @@
 ﻿using BinanceP2P;
-using RestSharp;
 
-var Client = new RestClient("https://c2c.binance.com/");
-var Request = new RestRequest("bapi/c2c/v2/friendly/c2c/adv/search");
-Request.RequestFormat = DataFormat.Json;
-Request.AddJsonBody(new PayLoad());
-
-var Results = await Helper.GetData(Client, Request);
+var ReceivedData = await Helper.GetData(
+  BaseUrl: "https://c2c.binance.com/", 
+  QueryString: "bapi/c2c/v2/friendly/c2c/adv/search"
+);
 
 while (true)
 {
-  Helper.PrintResults(Results);
+  Helper.PrintResults(ReceivedData);
   await Task.Delay(60000);
 }
-

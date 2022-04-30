@@ -17,12 +17,18 @@ namespace BinanceP2P
             String.Format("{0,-10} | {1,-10} | {2, 20}|",
             item.adv.price,
             item.adv.dynamicMaxSingleTransAmount,
-            item.advertiser.nickName));
+            item.advertiser.nickName
+          ));
         }
       }
     }
-    public static async Task<IEnumerable<Datum>> GetData(RestClient Client, RestRequest Request)
+
+    public static async Task<IEnumerable<Datum>> GetData(string BaseUrl, string QueryString)
     {
+      var Client = new RestClient(BaseUrl);
+      var Request = new RestRequest(QueryString);
+      Request.RequestFormat = DataFormat.Json;
+      Request.AddJsonBody(new PayLoad());
       var Response = await Client.ExecutePostAsync(Request);
 
       var Results = JsonConvert.DeserializeObject<Response>(Response?.Content!)?.data
@@ -31,6 +37,7 @@ namespace BinanceP2P
             Convert.ToDecimal(x.adv.price) > Requirements.MinAcceptedPrice &&
             x.advertiser.monthFinishRate > Requirements.TransactionFinishRate
       );
+
       return Results!;
     }
   }
