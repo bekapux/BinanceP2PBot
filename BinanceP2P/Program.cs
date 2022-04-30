@@ -2,10 +2,12 @@
 
 while (true)
 {
-  var ReceivedData = await Helper.GetData(
+  var ReceivedData = await Helper.GetDataFromAPI(
     BaseUrl: "https://c2c.binance.com/",
     QueryString: "bapi/c2c/v2/friendly/c2c/adv/search"
   );
+
   Helper.PrintResults(ReceivedData);
-  await Task.Delay(60000);
+
+  await Helper.DelaySeconds(60);
 }
