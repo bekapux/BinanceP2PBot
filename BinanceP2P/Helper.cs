@@ -38,13 +38,16 @@ namespace BinanceP2P
         Request.AddJsonBody(new PayLoad());
         var Response = await Client.ExecutePostAsync(Request);
 
-        var Results = JsonConvert.DeserializeObject<Response>(Response?.Content!)?.data
+        var ConvertedResults = JsonConvert.DeserializeObject<Response>(Response?.Content!);
+
+        var Result = ConvertedResults?.data
             .Where(x =>
               x.advertiser.monthOrderCount > Requirements.MinTransactionCount &&
               Convert.ToDecimal(x.adv.price) > Requirements.MinAcceptedPrice &&
               x.advertiser.monthFinishRate > Requirements.TransactionFinishRate
         );
-        return Results;
+
+        return Result;
       }
       catch (Exception ex)
       {
